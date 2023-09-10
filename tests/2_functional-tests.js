@@ -70,8 +70,10 @@ suite('Functional Tests', function () {
 });
 
 const Browser = require('zombie');
-
+Browser.site = 'https://expert-giggle-x49prj7j5qpf54w-3000.app.github.dev/'
 suite('Functional Tests with Zombie.js', function () {
+  const browser = new Browser;
+  suiteSetup((done) => browser.visit('/', done))
   this.timeout(5000);
 
 
@@ -85,14 +87,28 @@ suite('Functional Tests with Zombie.js', function () {
   suite('"Famous Italian Explorers" form', function () {
     // #5
     test('Submit the surname "Colombo" in the HTML form', function (done) {
-      assert.fail();
-
+      browser.fill('surname', 'Colombo').then(() => {
+        browser.pressButton('submit', () => {
+          browser.assert.success()
+          browser.assert.text('span#name', 'Cristoforo');
+      browser.assert.text('span#surname', 'Colombo');
+      browser.assert.elements('span#dates', 1);
+        })
+      })
       done();
     });
     // #6
     test('Submit the surname "Vespucci" in the HTML form', function (done) {
-      assert.fail();
 
+      browser.fill('surname', 'Vespucci').then(() => {
+        browser.pressButton('submit', () => {
+          browser.assert.success()
+          browser.assert.text('span#name', 'Amerigo');
+      browser.assert.text('span#surname', 'Vespucci');
+      browser.assert.elements('span#dates', 1);
+        })
+      })
+      done();
       done();
     });
   });
